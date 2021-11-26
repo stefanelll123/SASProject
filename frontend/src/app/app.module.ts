@@ -3,10 +3,12 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { ColdStartComponent } from './feature/cold-start/cold-start.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ColdStartComponent,
   ],
   imports: [
     BrowserModule,
