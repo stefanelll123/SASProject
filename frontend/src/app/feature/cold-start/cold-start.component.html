@@ -1,0 +1,27 @@
+<div class="cold-start">
+  <div class="cold-start-wrapper">
+    <div>
+      Buna ziua, Andrei Popescu! Te rugam sa alegi cel putin 3 arii de interes.
+    </div>
+    <div class="grid cold-start-container">
+      <div
+        class="cold-start-container-item"
+        [ngClass]="{
+          'cold-start-container-item-selected': preferences.includes(item.id)
+        }"
+        *ngFor="let item of items"
+        (click)="modifyPreferences(item)"
+      >
+        {{ item.name }}
+      </div>
+    </div>
+    <div class="flex center">
+      <button
+        class="btn btn-primary"
+        [ngClass]="{ 'btn-disabled': preferences.length < 3 }"
+      >
+        Continue
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,39 @@
+@mixin position($position, $coordinates: null null null null) {
+  position: $position;
+  top: nth($coordinates, 1);
+  right: nth($coordinates, 2);
+  bottom: nth($coordinates, 3);
+  left: nth($coordinates, 4);
+}
+
+@mixin flex($align: null, $justify: null) {
+  display: flex;
+
+  @if ($align != null) {
+    align-items: $align;
+  }
+
+  @if ($justify != null) {
+    justify-content: $justify;
+  }
+}
+
+@mixin size($width: null, $height: null) {
+  @if ($width != null) {
+    width: $width;
+  }
+
+  @if ($height != null) {
+    height: $height;
+  }
+}
+
+@mixin max-size($max-width: null, $max-height: null) {
+  @if ($max-width != null) {
+    max-width: $max-width;
+  }
+
+  @if ($max-height != null) {
+    max-height: $max-height;
+  }
+}
