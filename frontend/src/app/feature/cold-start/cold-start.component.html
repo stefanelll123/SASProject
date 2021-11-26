@@ -16,12 +16,13 @@
       </div>
     </div>
     <div class="flex center">
-      <button
+      <a
         class="btn btn-primary"
         [ngClass]="{ 'btn-disabled': preferences.length < 3 }"
+        [routerLink]="preferences.length < 3 ? '' : '/articles'"
       >
         Continue
-      </button>
+      </a>
     </div>
   </div>
 </div>
