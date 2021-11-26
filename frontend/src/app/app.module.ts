@@ -4,11 +4,15 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ColdStartComponent } from './feature/cold-start/cold-start.component';
+import { ArticleListComponent } from './feature/article/article-list/article-list.component';
+import { HeaderComponent } from './components/header/header.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ColdStartComponent,
+    ArticleListComponent,
+    HeaderComponent,
   ],
   imports: [
     BrowserModule,
