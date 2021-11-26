@@ -1,0 +1,76 @@
+@import "../../../assets/scss/variables.scss";
+@import "../../../assets/scss/mixins.scss";
+
+.header {
+  @include flex(flex-start, space-between);
+  @include size(100%, 75px);
+  background-color: white;
+  padding: 10px 30px;
+  border-bottom: 1px solid $color-border;
+  box-shadow: rgba(17, 17, 26, 0.1) 0px 1px 0px;
+
+  &-first,
+  &-second {
+    @include flex(center, null);
+  }
+
+  &-section {
+    &-logo {
+      @include flex(center, null);
+      margin-right: 70px;
+
+      div {
+        @include size(35px, 35px);
+        border-radius: 9999px;
+        background: $color-primary;
+        margin-right: 20px;
+      }
+    }
+
+    &-search {
+      @include flex(center, null);
+      width: 100%;
+      position: relative;
+
+      input {
+        width: 400px;
+        border: 1px solid $color-border;
+        border-left: none;
+        padding: 5px;
+        height: 30px;
+        border-radius: 0px 999px 999px 0px;
+        outline: none;
+        color: $color-text;
+      }
+
+      input::placeholder {
+        color: $color-text;
+        font-weight: 100;
+      }
+
+      button {
+        width: 60px;
+        height: 30px;
+        border: 1px solid $color-border;
+        background: $color-primary;
+        text-align: center;
+        color: #fff;
+        border-radius: 999px 0px 0px 999px;
+        cursor: pointer;
+        font-size: 20px;
+      }
+    }
+  }
+
+  &-second {
+    @include flex();
+
+    div {
+      @include flex(center, center);
+      @include size(35px, 35px);
+      border-radius: 999px;
+      background: $color-light;
+      margin-right: 30px;
+    }
+  }
+}
