@@ -10,9 +10,16 @@ from flask import Response
 import requests
 
 from pymongo import MongoClient
+from pymongo import TEXT
 from dotenv import load_dotenv
 
 from newsfeedResponse import NewsfeedResponse
+
+def createMongotextIndexes(articles):
+    articles.create_index([
+        ("title", TEXT),
+        ("subtitle", TEXT)
+    ])
 
 app = Flask(__name__)
 CORS(app)
@@ -21,6 +28,7 @@ load_dotenv()
 client = MongoClient(os.getenv('CONNECTION_STRING'))
 db = client['recommendation']
 articles = db['articles']
+createMongotextIndexes(articles)
 
 key = os.getenv('SECRET')
 identityUri = os.getenv('IDENTITY_URI')
@@ -72,6 +80,19 @@ def getArticlesForUser():
     limit = 20 if queryParams.get('limit') == None else int(queryParams.get('limit'))
 
     results = articles.find({ 'tags': { '$in': preferences } }).skip(offeset).limit(limit)
+    return Response(str(NewsfeedResponse(list(results))), status=200)
+
+@app.route("/api/articles", methods = ['GET'])
+@cross_origin()
+def search():
+    queryParams = request.args.to_dict()
+    search = queryParams.get('search')
+
+    if search == None:
+        return Response([], status=200)
+
+    results = articles.find({'$text': { '$search': search }}).limit(100)
+
     return Response(str(NewsfeedResponse(list(results))), status=200)
 
 app.run(debug=True)

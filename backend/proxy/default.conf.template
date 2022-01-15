@@ -22,4 +22,8 @@ server {
     location /api/newsfeed {
         proxy_pass ${RECOMMENDATION_URI};
     }
+
+    location /api/articles {
+        proxy_pass ${RECOMMENDATION_URI};
+    }
 }
