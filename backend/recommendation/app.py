@@ -22,7 +22,8 @@ def createMongotextIndexes(articles):
     ])
 
 app = Flask(__name__)
-CORS(app)
+#CORS(app)
+cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 load_dotenv()
 
 client = MongoClient(os.getenv('CONNECTION_STRING'))
@@ -78,7 +79,7 @@ def checkIfAuthentificated():
         return response
         
 @app.route("/api/newsfeed", methods = ['GET'])
-@cross_origin()
+#@cross_origin()
 def getArticlesForUser():
     userId = decodeJwt(request.headers.get('Authentication'))['sub']
     
@@ -107,7 +108,7 @@ def getArticlesForUser():
     return Response(str(response), status=200)
 
 @app.route("/api/articles", methods = ['GET'])
-@cross_origin()
+#@cross_origin()
 def search():
     queryParams = request.args.to_dict()
     search = queryParams.get('search')
