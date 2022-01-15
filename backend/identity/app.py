@@ -28,7 +28,8 @@ from userPreferencesResponse import UserPreferencesResponse
 from userLikesResponse import UserLikesResponse
 
 app = Flask(__name__)
-CORS(app)
+#CORS(app)
+cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 load_dotenv()
 
 client = MongoClient(os.getenv('CONNECTION_STRING'))
@@ -89,7 +90,7 @@ def bad_request(error):
 
 @app.route("/api/login", methods = ['POST'])
 @expects_json(loginSchema)
-@cross_origin()
+#@cross_origin()
 def login():
     user = UserLoginRequest(request.get_json())
 
@@ -102,7 +103,7 @@ def login():
 
 @app.route('/api/register', methods = ['POST'])
 @expects_json(registerSchema)
-@cross_origin()
+#@cross_origin()
 def register():
     user = UserRegisterRequest(request.get_json())
 
@@ -115,7 +116,7 @@ def register():
     return Response('{"message": "User with id %s created."}' % response.inserted_id, status=200)
 
 @app.route('/api/users/<id>/preferences', methods= ['GET'])
-@cross_origin()
+#@cross_origin()
 def getUserPreferencesById(id):
     databaseUser = users.find_one({'_id': ObjectId(id)})
     if databaseUser == None:
@@ -125,7 +126,7 @@ def getUserPreferencesById(id):
     return Response(str(response), status=200)
 
 @app.route('/api/users/<id>/likes', methods= ['GET'])
-@cross_origin()
+#@cross_origin()
 def getUserLikesById(id):
     userId = decodeJwt(request.headers.get('Authentication'))['sub']
     if id != userId:
@@ -140,7 +141,7 @@ def getUserLikesById(id):
 
 @app.route('/api/users/<id>/likes', methods= ['POST'])
 @expects_json(likeSchema)
-@cross_origin()
+#@cross_origin()
 def addLike(id):
     userId = decodeJwt(request.headers.get('Authentication'))['sub']
     if id != userId:
