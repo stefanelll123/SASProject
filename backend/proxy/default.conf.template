@@ -14,4 +14,8 @@ server {
     location /api/register {
         proxy_pass ${IDENTITY_URI};
     }
+
+    location /api/users {
+        proxy_pass ${IDENTITY_URI};
+    }
 }
