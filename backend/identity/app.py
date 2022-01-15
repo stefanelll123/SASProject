@@ -50,7 +50,7 @@ def bad_request(error):
         return make_response(jsonify({'error': message, 'field': list(original_error.path)[0]}), 400)
     return error
 
-@app.route("/login", methods = ['POST'])
+@app.route("/api/login", methods = ['POST'])
 @expects_json(loginSchema)
 def login():
     user = UserLoginRequest(request.get_json())
@@ -62,7 +62,7 @@ def login():
     response = UserLoginResponse(createToken(databaseUser['_id'], databaseUser['email']), databaseUser['firstName'], databaseUser['lastName'])
     return Response(str(response), status=200)
 
-@app.route('/register', methods = ['POST'])
+@app.route('/api/register', methods = ['POST'])
 @expects_json(registerSchema)
 def register():
     user = UserRegisterRequest(request.get_json())

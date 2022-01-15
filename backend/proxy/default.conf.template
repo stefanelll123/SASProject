@@ -7,7 +7,11 @@ server {
 
     #access_log  /var/log/nginx/host.access.log  main;
 
-    location /login {
-        return 200 "root";
+    location /api/login {
+        proxy_pass ${IDENTITY_URI};
+    }
+
+    location /api/register {
+        proxy_pass ${IDENTITY_URI};
     }
 }

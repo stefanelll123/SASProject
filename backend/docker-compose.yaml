@@ -28,10 +28,11 @@ services:
     image: nginx
     container_name: sas-proxy
     volumes:
-      - ./proxy/sas/conf:/etc/nginx/conf.d/default.conf
+      - ./proxy:/etc/nginx/templates
     ports:
       - "8800:80"
     environment:
+      - NGINX_ENVSUBST_TEMPLATE_SUFFIX.conf
       - NGINX_HOST=articles.ro
       - NGINX_PORT=80
       - IDENTITY_URI=http://identity:8801
