@@ -20,8 +20,12 @@ from userRegisterRequest import schema as registerSchema
 from userLoginRequest import UserLoginRequest
 from userLoginRequest import schema as loginSchema
 
+from likeRequest import LikeRequest
+from likeRequest import schema as likeSchema
+
 from userLoginResponse import UserLoginResponse
 from userPreferencesResponse import UserPreferencesResponse
+from userLikesResponse import UserLikesResponse
 
 app = Flask(__name__)
 CORS(app)
@@ -33,6 +37,25 @@ users = db['users']
 
 key = os.getenv('SECRET')
 
+
+def isValidToken(token):
+    try:
+        decodeJwt(token)
+        return True
+    except Exception as e:
+        print(e)
+        return False
+
+def decodeJwt(token):
+    components = token.split(' ')
+    if len(components) != 2:
+        raise Exception()
+
+    token = components[1]
+
+    header_data = jwt.get_unverified_header(token)
+    return jwt.decode(token, key=key, algorithms=[header_data['alg'], ])
+
 def createToken(userId, email):
     token = jwt.encode(
         payload= {
@@ -42,6 +65,16 @@ def createToken(userId, email):
         key=key
     )
     return token
+
+@app.before_request
+def checkIfAuthentificated():
+    if 'login' not in request.endpoint and 'register' not in request.endpoint:
+        response = Response('{"error": "Please login before"}', status=401)
+        if request.headers.get('Authentication') == None:
+            return response
+
+        if not isValidToken(request.headers.get('Authentication')):
+            return response
 
 @app.errorhandler(400)
 def bad_request(error):
@@ -90,5 +123,37 @@ def getUserPreferencesById(id):
 
     response = UserPreferencesResponse(databaseUser['preferences'])
     return Response(str(response), status=200)
+
+@app.route('/api/users/<id>/likes', methods= ['GET'])
+@cross_origin()
+def getUserLikesById(id):
+    userId = decodeJwt(request.headers.get('Authentication'))['sub']
+    if id != userId:
+        return Response('{"error": "User with id: %s is not the one authentificated"}' % id, status=400)
+
+    databaseUser = users.find_one({'_id': ObjectId(id)})
+    if databaseUser == None:
+        return Response('{"error": "User with id: %s not found"}' % id, status=404)
+
+    response = UserLikesResponse(databaseUser['likes'])
+    return Response(str(response), status=200)
+
+@app.route('/api/users/<id>/likes', methods= ['POST'])
+@expects_json(likeSchema)
+@cross_origin()
+def addLike(id):
+    userId = decodeJwt(request.headers.get('Authentication'))['sub']
+    if id != userId:
+        return Response('{"error": "User with id: %s is not the one authentificated"}' % id, status=400)
+
+    databaseUser = users.find_one({'_id': ObjectId(id)})
+    if databaseUser == None:
+        return Response('{"error": "User with id: %s not found"}' % id, status=404)
+
+    like = LikeRequest(request.get_json())
+    users.update_one({ '_id': ObjectId(id) }, { '$addToSet': { 'likes': like.articleId } })
+
+    return Response('{"message": "Like for article %s added for user with id %s"}' % (like.articleId, id), status=200)
+    
     
 app.run(debug=True)

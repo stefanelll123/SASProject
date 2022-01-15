@@ -51,6 +51,23 @@ def decodeJwt(token):
     header_data = jwt.get_unverified_header(token)
     return jwt.decode(token, key=key, algorithms=[header_data['alg'], ])
 
+def markedArticlesAsLikedByUser(newsfeed, likes):
+    for article in newsfeed.articles:
+        if article['id'] in likes:
+            article['liked'] = True
+
+    return newsfeed
+
+def getLikes(userId):
+    response = requests.get(identityUri + '/api/users/%s/likes' % userId, headers={'Authentication': request.headers['Authentication']})
+    if response.status_code == 404:
+        return Response('{"error": "Userid not found"}', status=404)
+
+    if response.status_code != 200:
+        return Response('{"error": "%s"}' % response.reason, status=response.status_code)
+
+    return json.loads(response.content)['likes']
+
 @app.before_request
 def checkIfAuthentificated():
     response = Response('{"error": "Please login before"}', status=401)
@@ -65,7 +82,7 @@ def checkIfAuthentificated():
 def getArticlesForUser():
     userId = decodeJwt(request.headers.get('Authentication'))['sub']
     
-    response = requests.get(identityUri + '/api/users/%s/preferences' % userId)
+    response = requests.get(identityUri + '/api/users/%s/preferences' % userId, headers={'Authentication': request.headers['Authentication']})
     if response.status_code == 404:
         return Response('{"error": "Userid not found"}', status=404)
 
@@ -79,8 +96,15 @@ def getArticlesForUser():
     offeset = 0 if queryParams.get('offeset') == None else int(queryParams.get('offeset'))
     limit = 20 if queryParams.get('limit') == None else int(queryParams.get('limit'))
 
+    likes = getLikes(userId)
+    if isinstance(likes, Response):
+        return likes
+
     results = articles.find({ 'tags': { '$in': preferences } }).skip(offeset).limit(limit)
-    return Response(str(NewsfeedResponse(list(results))), status=200)
+    response = NewsfeedResponse(list(results))
+    response = markedArticlesAsLikedByUser(response, likes)
+
+    return Response(str(response), status=200)
 
 @app.route("/api/articles", methods = ['GET'])
 @cross_origin()
@@ -91,8 +115,15 @@ def search():
     if search == None:
         return Response([], status=200)
 
-    results = articles.find({'$text': { '$search': search }}).limit(100)
+    userId = decodeJwt(request.headers.get('Authentication'))['sub']
+    likes = getLikes(userId)
+    if isinstance(likes, Response):
+        return likes
 
-    return Response(str(NewsfeedResponse(list(results))), status=200)
+    results = articles.find({'$text': { '$search': search }}).limit(100)
+    response = NewsfeedResponse(list(results))
+    response = markedArticlesAsLikedByUser(response, likes)
+
+    return Response(str(response), status=200)
 
 app.run(debug=True)
