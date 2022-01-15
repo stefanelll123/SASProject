@@ -1,0 +1,46 @@
+<app-header></app-header>
+
+<div class="content flex column al-center">
+  <form class="form flex column al-center" action="" [formGroup]="form">
+    <div class="form-title">Login</div>
+    <div class="form-col">
+      <div class="form-group">
+        <label for=""> Email </label>
+        <input
+          type="email"
+          formControlName="email"
+          placeholder="example@gmail.com"
+        />
+        <p
+          *ngIf="isFormSubmitted && form.get('email').hasError('required')"
+          class="form-errors"
+        >
+          {{ errorsEnum.requiredField }}
+        </p>
+        <p
+          *ngIf="isFormSubmitted && form.get('email').hasError('email')"
+          class="form-errors"
+        >
+          {{ errorsEnum.email }}
+        </p>
+      </div>
+      <div class="form-group">
+        <label for=""> Password </label>
+        <input
+          type="password"
+          formControlName="password"
+          placeholder="********"
+        />
+        <p
+          *ngIf="isFormSubmitted && form.get('password').hasError('required')"
+          class="form-errors"
+        >
+          {{ errorsEnum.requiredField }}
+        </p>
+      </div>
+    </div>
+    <div>
+      <button class="btn btn-primary" (click)="submit()">Login</button>
+    </div>
+  </form>
+</div>

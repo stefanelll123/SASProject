@@ -34,7 +34,7 @@ button {
 .btn {
   @include flex(center, center);
   font-family: inherit;
-  height: 40px;
+  height: 30px;
   border-radius: 9999px;
   font-family: Arial, Helvetica, sans-serif;
   padding: 0 50px;
@@ -59,5 +59,78 @@ button {
   &-disabled {
     opacity: 0.5;
     cursor: not-allowed;
+  }
+}
+
+.form {
+  border-radius: 5px;
+  margin-top: 50px;
+  background-color: white;
+  padding: 50px;
+  min-width: 400px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+
+  &-title {
+    font-size: 20px;
+    margin-bottom: 20px;
+    font-weight: 600;
+  }
+
+  &-row {
+    @include flex();
+    margin: 20px;
+
+    .form-group:last-of-type {
+      margin-right: 0px;
+    }
+  }
+
+  &-col {
+    @include flex();
+    flex-direction: column;
+    margin: 20px;
+  }
+
+  &-group {
+    @include flex();
+    flex-direction: column;
+    width: 255px;
+    margin-bottom: 20px;
+    margin-right: 20px;
+    position: relative;
+
+    label {
+      margin-bottom: 5px;
+      padding-left: 1px;
+    }
+
+    input {
+      height: 40px;
+      border: 1px solid $color-border;
+      border-radius: 5px;
+      padding: 0 7px;
+      background-color: $color-light;
+      width: 100%;
+      transition: 0.5s background-color;
+
+      &::placeholder {
+        color: rgba($color-text, 0.4);
+        transition: 0.3s opacity;
+      }
+    }
+
+    input:focus {
+      background-color: white;
+
+      &::placeholder {
+        opacity: 0;
+      }
+    }
+  }
+
+  &-errors {
+    font-size: 13px;
+    margin-top: 5px;
+    color: $color-danger;
   }
 }
