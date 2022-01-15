@@ -18,4 +18,8 @@ server {
     location /api/users {
         proxy_pass ${IDENTITY_URI};
     }
+
+    location /api/newsfeed {
+        proxy_pass ${RECOMMENDATION_URI};
+    }
 }

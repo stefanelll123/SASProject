@@ -34,6 +34,7 @@ services:
     environment:
       - NGINX_ENVSUBST_TEMPLATE_SUFFIX.conf
       - IDENTITY_URI=http://identity:8801
+      - RECOMMENDATION_URI=http://recommendation:8802
 
   identity:
     container_name: sas-identity
@@ -54,3 +55,4 @@ services:
     environment:
       CONNECTION_STRING: mongodb://root:example@mongo:27017/
       IDENTITY_URI: http://identity:8801
+      SECRET: SASProject
