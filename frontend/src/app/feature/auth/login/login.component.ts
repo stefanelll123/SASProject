@@ -43,6 +43,8 @@ export class LoginComponent implements OnInit {
         console.log(response)
         this.toastService.show({error: false, message: 'You have successfully logged in!'});
         localStorage.setItem('access_token', response.token)
+        delete response.token;
+        localStorage.setItem('user', JSON.stringify(response))
         this.router.navigate(['/articles']);
       }),
       catchError(error => {

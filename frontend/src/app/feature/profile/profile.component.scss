@@ -1,0 +1,29 @@
+@import "../../../assets/scss/variables.scss";
+@import "../../../assets/scss/mixins.scss";
+
+.content {
+  width: 90%;
+  margin: 50px auto;
+}
+
+.profile-info {
+  min-width: 200px;
+  background: white;
+  border-radius: 5px;
+  padding: 20px;
+  height: auto;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+
+  &-name {
+    margin-bottom: 20px;
+  }
+}
+
+.icon {
+  @include flex(center, center);
+  @include size(50px, 50px);
+  position: relative;
+  border-radius: 999px;
+  background: $color-light;
+  margin-bottom: 20px;
+}

@@ -57,6 +57,11 @@ button {
     border: 2px solid $color-primary;
   }
 
+  &-danger {
+    background: $color-danger;
+    color: #fff;
+  }
+
   &-disabled {
     opacity: 0.5;
     cursor: not-allowed;

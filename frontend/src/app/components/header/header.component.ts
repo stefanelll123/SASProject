@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ProfileService } from 'src/app/feature/profile/profile.service';
 
 @Component({
   selector: 'app-header',
@@ -8,13 +9,25 @@ import { Router } from '@angular/router';
 })
 export class HeaderComponent implements OnInit {
 
-  isAllHeaderVisible: boolean;
+  isSearchVisible: boolean;
+  isProfileIconVisible: boolean;
+  currentUrl:string;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, public profileService:ProfileService) { }
 
   ngOnInit(): void {
 
-    this.isAllHeaderVisible = !(this.router.url === '/login' || this.router.url === '/register');
+    this.currentUrl = this.router.url;
+
+    this.isSearchVisible = !(this.currentUrl === '/login' || this.currentUrl === '/register' || this.currentUrl === '/profile');
+    this.isProfileIconVisible = !(this.currentUrl === '/login' || this.currentUrl === '/register');
+  }
+
+  logout(): void {
+
+    localStorage.removeItem('user')
+    localStorage.removeItem('access_token')
+    location.reload();
   }
 
 }

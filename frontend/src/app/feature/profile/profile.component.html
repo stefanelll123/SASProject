@@ -1,1 +1,19 @@
-<p>profile works!</p>
+<app-header></app-header>
+
+<div class="content flex">
+  <div class="flex column al-center profile-info">
+    <div class="icon">
+      <i class="fa fa-user" style="font-size: 20px; color: #e7eaee"></i>
+    </div>
+    <div class="profile-info-name">
+      {{
+        profileService.currentUser.firstName +
+          " " +
+          profileService.currentUser.lastName
+      }}
+    </div>
+    <div>
+      {{ profileService.currentUser.email }}
+    </div>
+  </div>
+</div>

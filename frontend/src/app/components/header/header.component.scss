@@ -63,14 +63,41 @@
   }
 
   &-second {
-    @include flex();
+    position: relative;
 
-    div {
+    .icon {
       @include flex(center, center);
       @include size(35px, 35px);
+      position: relative;
       border-radius: 999px;
       background: $color-light;
-      margin-right: 30px;
+    }
+
+    &:hover .header-second-user {
+      opacity: 1;
+    }
+
+    &-user {
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      width: 220px;
+      background-color: $color-light;
+      padding: 20px;
+      box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+      border-radius: 5px;
+      opacity: 0;
+      transition: 0.3 s opacity;
+      transition-delay: 0.4s;
+
+      div {
+        margin-bottom: 20px;
+      }
+
+      button:last-of-type {
+        margin-bottom: 0;
+        padding: 0 66px;
+      }
     }
   }
 }
