@@ -12,27 +12,20 @@ export class ArticleService {
   baseURL = 'http://localhost:8802/api/';
 
   articles = [];
-  options;
 
   constructor(private http: HttpClient, private toastService:ToastService, private router: Router) {
-    this.options = {
-      headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-          // 'Access-Control-Allow-Headers': 'Access-Control-Allow-Origin',
-      }),
-  };
   }
 
   getArticles(): void {
     const url = this.baseURL+'articles/0/10?';
 
-    this.http.get(url, this.options);
+    this.http.get(url);
   }
 
   getNewsFeed(): Observable<any> {
     const url = this.baseURL+'newsfeed/0/10?';
 
-    return this.http.get(url, this.options);
+    return this.http.get(url);
   }
 
   setArticles(articles): void {
