@@ -8,7 +8,7 @@ class UserRegisterRequest():
         self.lastName = dictionary['lastName']
 
         self.preferences = dictionary['preferences']
-        self.liked = []
+        self.likes = []
 
 schema = {
     'type': 'object',

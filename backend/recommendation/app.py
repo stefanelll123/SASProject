@@ -22,8 +22,8 @@ def createMongotextIndexes(articles):
     ])
 
 app = Flask(__name__)
-#CORS(app)
-cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+CORS(app)
+#cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 load_dotenv()
 
 client = MongoClient(os.getenv('CONNECTION_STRING'))
@@ -71,12 +71,13 @@ def getLikes(userId):
 
 @app.before_request
 def checkIfAuthentificated():
-    response = Response('{"error": "Please login before"}', status=401)
-    if request.headers.get('Authentication') == None:
-        return response
+    if request.method != 'OPTIONS':
+        response = Response('{"error": "Please login before"}', status=401)
+        if request.headers.get('Authentication') == None:
+            return response
 
-    if not isValidToken(request.headers.get('Authentication')):
-        return response
+        if not isValidToken(request.headers.get('Authentication')):
+            return response
         
 @app.route("/api/newsfeed", methods = ['GET'])
 #@cross_origin()
@@ -91,7 +92,8 @@ def getArticlesForUser():
         return Response('{"error": "%s"}' % response.reason, status=response.status_code)
 
     preferences = json.loads(response.content)['preferences']
-    preferences = [x.lower() for x in preferences]
+    preferences = [str(x).lower() for x in preferences]
+    print(preferences)
     
     queryParams = request.args.to_dict()
     offeset = 0 if queryParams.get('offeset') == None else int(queryParams.get('offeset'))
