@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { ToastService } from 'src/app/components/toast/toast.service';
 import { GlobalErrorsEnum } from 'src/app/interfaces/global-errors.enum';
 import { AuthService } from '../auth.service';
 
@@ -19,101 +23,56 @@ export class RegisterComponent implements OnInit {
     firstName: ['', [Validators.required]],
     lastName: ['', [Validators.required]],
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required]],
+    password: ['', [Validators.required, Validators.minLength(8)]],
   });
-  errorsEnum = GlobalErrorsEnum;
-  isFormSubmitted = false;
   registerStep = RegisterStepsEnum.firstStep;
   registerStepsEnum = RegisterStepsEnum;
-  preferences= [];
-  items= [
-    {
-      id:1,
-      name: 'Mobile Application'
-    },
-    {
-      id:2,
-      name: 'Web Application'
-    },
-    {
-      id:3,
-      name: 'Quality Assurance'
-    },
-    {
-      id:4,
-      name: 'Database administrator'
-    },
-    {
-      id:5,
-      name: 'Network administrator'
-    },
-    {
-      id:6,
-      name: 'Web Application'
-    },
-    {
-      id:7,
-      name: 'Quality Assurance'
-    },
-    {
-      id:8,
-      name: 'Database administrator'
-    },
-    {
-      id:9,
-      name: 'Network administrator'
-    },
-    {
-      id:10,
-      name: 'Web Application'
-    },
-    {
-      id:11,
-      name: 'Quality Assurance'
-    },
-    {
-      id:12,
-      name: 'Database administrator'
-    },
-    {
-      id:13,
-      name: 'Network administrator'
-    }
-  ]
+  errorsEnum = GlobalErrorsEnum;
+  isFormSubmitted = false;
+  preferences=null;
+  selectedPreferences=[];
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  constructor(private fb: FormBuilder, private authService: AuthService,  private toastService:ToastService, private router: Router) {
   }
 
   ngOnInit(): void {
 
+    this.preferences = this.authService.preferences;
   }
 
   modifyPreferences(item) {
 
-    const indexOfSelectedItem = this.preferences.indexOf(item.id);
+    const indexOfSelectedItem = this.selectedPreferences.indexOf(item.id);
 
-    indexOfSelectedItem === -1 ? this.preferences.push(item.id) : this.preferences.splice(indexOfSelectedItem,1)
-
-    console.log(this.preferences);
+    indexOfSelectedItem === -1 ? this.selectedPreferences.push(item.id) : this.selectedPreferences.splice(indexOfSelectedItem,1)
   }
 
   submit(): void {
 
     this.isFormSubmitted = true;
 
-    if(this.form.invalid || this.preferences.length < 3) {
+    if(this.form.invalid || this.selectedPreferences.length < 3) {
       return;
     }
 
     const payload = {
       ...this.form.value,
-      preferences: this.preferences
+      preferences: this.selectedPreferences
     }
 
-    console.log(payload)
-
     const sub = this.authService.register(payload);
-    sub.subscribe(val => console.log(val))
+
+    sub.pipe(
+      map((response: any) => {
+        console.log(response)
+        this.toastService.show({error: false, message: 'You register successfully!'});
+        this.router.navigate(['login']);
+      }),
+      catchError(error => {
+        console.log(error)
+        this.toastService.show({error: true, message: error.error.error});
+        return of(error);
+     })).subscribe();
   }
 
   goToSecondStep():void {
@@ -126,5 +85,11 @@ export class RegisterComponent implements OnInit {
 
     this.isFormSubmitted = false;
     this.registerStep = RegisterStepsEnum.secondStep
+  }
+
+  goToTheFirstStep(): void {
+
+    this.isFormSubmitted = false;
+    this.registerStep = RegisterStepsEnum.firstStep
   }
 }

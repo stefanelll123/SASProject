@@ -1,8 +1,10 @@
 import {Injectable} from '@angular/core';
 import {environment} from '../../../environments/environment';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
+import { ToastService } from 'src/app/components/toast/toast.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -10,9 +12,25 @@ import { catchError, map, tap } from 'rxjs/operators';
 export class AuthService {
 
   baseURL = environment.apiUrl;
+  preferences= [
+    {id:1, name: 'Mobile Application'},
+    {id:2, name: 'Web Application'},
+    {id:3, name: 'Quality Assurance'},
+    {id:4, name: 'Database administrator'},
+    {id:5, name: 'Network administrator'},
+    {id:6, name: 'Angular'},
+    {id:7, name: 'React'},
+    {id:8, name: 'Javascript'},
+    {id:9, name: 'Java'},
+    {id:10, name: 'Python'},
+    {id:11, name: 'PHP'},
+    {id:12, name: 'SQL Database'},
+    {id:13, name: 'NoSQL Database'},
+    {id:14, name: 'MySQL'}
+  ]
   options;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private toastService:ToastService, private router: Router) {
       this.options = {
           headers: new HttpHeaders({
               'Content-Type': 'application/json',
@@ -25,7 +43,14 @@ export class AuthService {
     
     const url = this.baseURL + 'register';
 
-    console.log(url)
+    const newUserPayloadCopy = JSON.parse(JSON.stringify(newUserPayload));
+    const preferencesAsString = newUserPayloadCopy.preferences.map(preference => {
+      return this.preferences.find(item => item.id === preference).name.toLocaleLowerCase();
+    })
+
+    newUserPayloadCopy.preferences = preferencesAsString;
+
+    console.log(url, newUserPayloadCopy)
 
     return this.http.post(url, newUserPayload, this.options);
   }
@@ -34,6 +59,6 @@ export class AuthService {
 
     const apiURL = this.baseURL + 'login';
 
-    return this.http.post(apiURL, form, this.options);
-}
+    return this.http.post(apiURL, form, this.options);  
+  }
 }

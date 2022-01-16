@@ -1,7 +1,7 @@
 <app-header></app-header>
 
 <div class="content flex column al-center">
-  <div class="article" *ngFor="let article of articles">
+  <div class="article" *ngFor="let article of articleService.articles">
     <div class="article-header">
       <div class="article-title">{{ article.title }}</div>
       <div class="article-recommendations">

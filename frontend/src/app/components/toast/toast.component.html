@@ -1,0 +1,11 @@
+<aside
+  [ngClass]="{
+    active: data,
+    'toast-primary': !data?.error,
+    'toast-danger': data?.error
+  }"
+>
+  <ng-container *ngIf="data">
+    <p>{{ data.message }}</p>
+  </ng-container>
+</aside>

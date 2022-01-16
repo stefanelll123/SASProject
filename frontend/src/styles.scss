@@ -34,6 +34,7 @@ button {
 .btn {
   @include flex(center, center);
   font-family: inherit;
+  margin-bottom: 20px;
   height: 30px;
   border-radius: 9999px;
   font-family: Arial, Helvetica, sans-serif;
@@ -76,9 +77,13 @@ button {
     font-weight: 600;
   }
 
+  &-content {
+    margin: 20px 0px;
+  }
+
   &-row {
     @include flex();
-    margin: 20px;
+    margin: 0 20px 20px 20px;
 
     .form-group:last-of-type {
       margin-right: 0px;
@@ -95,7 +100,6 @@ button {
     @include flex();
     flex-direction: column;
     width: 255px;
-    margin-bottom: 20px;
     margin-right: 20px;
     position: relative;
 
@@ -129,7 +133,8 @@ button {
   }
 
   &-errors {
-    font-size: 13px;
+    font-style: italic;
+    font-size: 12px !important;
     margin-top: 5px;
     color: $color-danger;
   }

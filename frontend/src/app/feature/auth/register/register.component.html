@@ -11,24 +11,24 @@
         <div class="form-group">
           <label for=""> First name </label>
           <input type="text" formControlName="firstName" placeholder="Mike" />
-          <p
+          <div
             *ngIf="
               isFormSubmitted && form.get('firstName').hasError('required')
             "
             class="form-errors"
           >
             {{ errorsEnum.requiredField }}
-          </p>
+          </div>
         </div>
         <div class="form-group">
           <label for=""> Last name </label>
           <input type="text" formControlName="lastName" placeholder="Smith" />
-          <p
+          <div
             *ngIf="isFormSubmitted && form.get('lastName').hasError('required')"
             class="form-errors"
           >
             {{ errorsEnum.requiredField }}
-          </p>
+          </div>
         </div>
       </div>
       <div class="form-row">
@@ -39,18 +39,18 @@
             formControlName="email"
             placeholder="example@gmail.com"
           />
-          <p
+          <div
             *ngIf="isFormSubmitted && form.get('email').hasError('required')"
             class="form-errors"
           >
             {{ errorsEnum.requiredField }}
-          </p>
-          <p
+          </div>
+          <div
             *ngIf="isFormSubmitted && form.get('email').hasError('email')"
             class="form-errors"
           >
             {{ errorsEnum.email }}
-          </p>
+          </div>
         </div>
         <div class="form-group">
           <label for=""> Password </label>
@@ -59,19 +59,29 @@
             formControlName="password"
             placeholder="********"
           />
-          <p
+          <div
             *ngIf="isFormSubmitted && form.get('password').hasError('required')"
             class="form-errors"
           >
             {{ errorsEnum.requiredField }}
-          </p>
+          </div>
+          <div
+            *ngIf="
+              isFormSubmitted && form.get('password').hasError('minlength')
+            "
+            class="form-errors"
+          >
+            {{ errorsEnum.minLength }}
+            8 characters
+          </div>
         </div>
       </div>
     </div>
-    <div>
+    <div class="flex column">
       <button class="btn btn-primary" (click)="goToSecondStep()">
         Next step
       </button>
+      <a class="btn btn-outline" [routerLink]="'/login'">Login</a>
     </div>
   </form>
 </div>
@@ -79,27 +89,40 @@
 <div class="cold-start" *ngIf="registerStep === registerStepsEnum.secondStep">
   <div class="cold-start-wrapper">
     <div>
-      Buna ziua, Andrei Popescu! Te rugam sa alegi cel putin 3 arii de interes.
+      <span>Hello, </span>
+      <span>{{ form.value.firstName + " " + form.value.lastName + "!" }}</span>
+      <span> Please select at least 3 area of interest.</span>
     </div>
     <div class="grid cold-start-container">
       <div
+        *ngFor="let item of preferences"
         class="cold-start-container-item"
         [ngClass]="{
-          'cold-start-container-item-selected': preferences.includes(item.id)
+          'cold-start-container-item-selected': selectedPreferences.includes(
+            item.id
+          )
         }"
-        *ngFor="let item of items"
         (click)="modifyPreferences(item)"
       >
         {{ item.name }}
       </div>
     </div>
-    <div class="flex center">
+    <div class="flex column al-center">
       <button
         class="btn btn-primary"
-        [ngClass]="{ 'btn-disabled': preferences.length < 3 }"
-        (click)="preferences.length < 3 ? '' : submit()"
+        style="width: 170px"
+        [ngClass]="{ 'btn-disabled': selectedPreferences.length < 3 }"
+        (click)="selectedPreferences.length < 3 ? '' : submit()"
       >
-        Continue
+        Register
+      </button>
+
+      <button
+        class="btn btn-outline"
+        style="width: 210px"
+        (click)="goToTheFirstStep()"
+      >
+        Previous step
       </button>
     </div>
   </div>

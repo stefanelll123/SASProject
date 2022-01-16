@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { ToastService } from 'src/app/components/toast/toast.service';
 import { GlobalErrorsEnum } from 'src/app/interfaces/global-errors.enum';
 import { AuthService } from '../auth.service';
 
@@ -17,7 +21,7 @@ export class LoginComponent implements OnInit {
   errorsEnum = GlobalErrorsEnum;
   isFormSubmitted = false;
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  constructor(private fb: FormBuilder, private authService: AuthService,  private toastService:ToastService, private router: Router) {
   }
 
   ngOnInit(): void {
@@ -33,6 +37,18 @@ export class LoginComponent implements OnInit {
     }
 
     const sub = this.authService.login(this.form.value);
-    sub.subscribe(val => console.log(val))
+
+    sub.pipe(
+      map((response: any) => {
+        console.log(response)
+        this.toastService.show({error: false, message: 'You have successfully logged in!'});
+        localStorage.setItem('access_token', response.token)
+        this.router.navigate(['/articles']);
+      }),
+      catchError(error => {
+        console.log(error)
+        this.toastService.show({error: true, message: error.error.error});
+        return of(error);
+     })).subscribe();
   }
 }

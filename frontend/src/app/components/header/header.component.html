@@ -5,14 +5,14 @@
       <span>ArticleSearch</span>
     </div>
 
-    <div class="header-section-search">
+    <div class="header-section-search" *ngIf="isAllHeaderVisible">
       <button style="font-size: 15px">
         <i class="fa fa-search fa-xs"></i>
       </button>
       <input type="text" placeholder="Type to Search..." />
     </div>
   </div>
-  <div class="header-second">
+  <div class="header-second" *ngIf="isAllHeaderVisible">
     <div>
       <i class="fa fa-user" style="font-size: 20px; color: #e7eaee"></i>
     </div>
