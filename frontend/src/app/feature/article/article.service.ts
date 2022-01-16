@@ -17,13 +17,13 @@ export class ArticleService {
   }
 
   getArticles(): void {
-    const url = this.baseURL+'articles/0/10?';
+    const url = this.baseURL+'articles?offeset=0&limit=20';
 
     this.http.get(url);
   }
 
   getNewsFeed(): Observable<any> {
-    const url = this.baseURL+'newsfeed/0/10?';
+    const url = this.baseURL+'newsfeed?offeset=0&limit=20';
 
     return this.http.get(url);
   }
