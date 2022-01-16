@@ -24,6 +24,18 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: example
       ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
 
+  rabbitmq:
+    container_name: sas-rabbitmq
+    image: rabbitmq:3-management-alpine
+    ports:
+        - 5672:5672
+        - 15672:15672
+    volumes:
+        - /c/personal/facultate/sac/volumes/rabbit/data/:/var/lib/rabbitmq
+        - /c/personal/facultate/sac/volumes/rabbit/log/:/var/log/rabbitmq
+        - ./rabbitmq/rabbitmq.config:/etc/rabbitmq/rabbitmq.config:ro
+        - ./rabbitmq/definitions.json:/etc/rabbitmq/definitions.json:ro
+
   proxy:
     image: nginx
     container_name: sas-proxy
@@ -56,3 +68,4 @@ services:
       CONNECTION_STRING: mongodb://root:example@mongo:27017/
       IDENTITY_URI: http://identity:8801
       SECRET: SASProject
+      RABBITMQ_SERVER: rabbitmq

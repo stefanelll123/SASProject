@@ -1,0 +1,39 @@
+{
+    "rabbit_version": "3.6.6",
+    "users": [
+     {
+      "name": "sas",
+      "password_hash": "4Zh/6LXWC6E3xqcUynXMLzoN0HwY2Bd4Ux8WRbrHqQgBp5qT",
+      "hashing_algorithm": "rabbit_password_hashing_sha256",
+      "tags": ""
+     },
+     {
+      "name": "admin",
+      "password_hash": "2NX4W3sr+KLb8huu5xb2uQ2/l7UysndY+EtAH5ZFYKBqc8NU",
+      "hashing_algorithm": "rabbit_password_hashing_sha256",
+      "tags": "administrator"
+     }
+    ],
+    "vhosts": [
+     {
+      "name": "\/vhost1"
+     },
+     {
+      "name": "\/vhost2"
+     }
+    ],
+    "permissions": [
+     {
+      "user": "sas",
+      "vhost": "\/vhost1",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+     }
+    ],
+    "parameters": [],
+    "policies": [],
+    "queues": [],
+    "exchanges": [],
+    "bindings": []
+}
