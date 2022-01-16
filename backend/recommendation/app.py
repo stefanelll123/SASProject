@@ -112,6 +112,8 @@ def getArticlesForUser():
 def search():
     queryParams = request.args.to_dict()
     search = queryParams.get('search')
+    offeset = 0 if queryParams.get('offeset') == None else int(queryParams.get('offeset'))
+    limit = 20 if queryParams.get('limit') == None else int(queryParams.get('limit'))
 
     if search == None:
         return Response([], status=200)
@@ -121,7 +123,7 @@ def search():
     if isinstance(likes, Response):
         return likes
 
-    results = articles.find({'$text': { '$search': search }}).limit(100)
+    results = articles.find({'$text': { '$search': search }}).skip(offeset).limit(limit)
     response = NewsfeedResponse(list(results))
     response = markedArticlesAsLikedByUser(response, likes)
 

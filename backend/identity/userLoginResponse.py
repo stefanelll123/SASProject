@@ -1,8 +1,11 @@
+from collections import UserDict
 import json
 
 class UserLoginResponse():
-    def __init__(self, token, firstName, lastName) -> None:
+    def __init__(self, token, userId, email, firstName, lastName) -> None:
         self.token = token
+        self.userId = userId
+        self.email = email
         self.firstName = firstName
         self.lastName = lastName
 

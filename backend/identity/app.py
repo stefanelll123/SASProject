@@ -98,7 +98,7 @@ def login():
     if databaseUser == None:
         return Response('{"error": "Wrong username or password"}', status=401)
 
-    response = UserLoginResponse(createToken(databaseUser['_id'], databaseUser['email']), databaseUser['firstName'], databaseUser['lastName'])
+    response = UserLoginResponse(createToken(databaseUser['_id'], databaseUser['email']), str(databaseUser['_id']), databaseUser['email'], databaseUser['firstName'], databaseUser['lastName'])
     return Response(str(response), status=200)
 
 @app.route('/api/register', methods = ['POST'])
