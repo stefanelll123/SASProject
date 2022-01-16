@@ -8,7 +8,6 @@ from dotenv import load_dotenv
 from pymongo import MongoClient
 
 load_dotenv()
-rabbitServer = os.getenv('RABBITMQ_SERVER')
 
 client = MongoClient(os.getenv('CONNECTION_STRING'))
 db = client['recommendation']
@@ -30,18 +29,49 @@ def callback(ch, method, properties, body):
         result = requests.get('https://medium.com/search?q=%s' % body['search'], headers= {'Accept': 'application/json'})
         if result.status_code == 200:
             #articles = re.search(r'window\[\"obvInit\"\]\((.*)\)', str(result.content))
-            articles = str(result.content).replace('])}while(1);</x>', '')
-            print(articles[0:20])
-            if articles != None:
-                text = articles#.group(1)
-                print('TEXT: %s' % text[249570:249585])
-                articles = json.loads(text, cls=LazyDecoder)
+            content = str(result.content.decode('ascii', 'ignore')).replace('])}while(1);</x>', '')
+            content = json.loads(content, cls=LazyDecoder)
+
+            for post in content['payload']['value']['posts']:
+                try:
+                    article = articles.find_one({'id': post['id']})
+                    if article == None:
+                        topics = [x['name'].lower() for x in post['virtuals']['topics']]
+                        primaryTopic = ''
+                        if len(topics) > 0:
+                            primaryTopic = topics[0]
+                        article = {
+                            "id": post['id'],
+                            "title": post['title'],
+                            "subtitle": post['virtuals']['subtitle'],
+                            "source": 'https://medium.com/pixelpassion/angular-vs-react-vs-vue-a-2017-comparison-c5c52d620176',
+                            "cover": post['virtuals']['previewImage']['imageId'],
+                            "primaryTopic": primaryTopic,
+                            "topics": topics,
+                            "tags": [x['name'].lower() for x in post['virtuals']['tags']],
+                            "claps": post['virtuals']['totalClapCount'],
+                            "readingTime":post['virtuals']['readingTime'],
+                            "recommends": post['virtuals']['recommends'],
+                        }
+
+                        articles.insert_one(article)
+                        print("Inserted")
+                        article = None
+                    else:
+                        print("skiped, already exists")
+                except Exception as e:
+                    print(e, file=sys.stderr)
+                    print('Not added')
+                    pass
+                
     except Exception as e:
-        print("[ERROR]:")
-        print(e)
+        print("[ERROR]:", file=sys.stderr)
+        print(e, file=sys.stderr)
+
+    print("[INFO] Message processed", file=sys.stderr)
 
 def main():
-    connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitServer))
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host=os.getenv('RABBITMQ_SERVER')))
     channel = connection.channel()
 
     channel.queue_declare(queue='searchMoreArticles')
