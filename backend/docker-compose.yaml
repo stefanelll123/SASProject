@@ -69,3 +69,11 @@ services:
       IDENTITY_URI: http://identity:8801
       SECRET: SASProject
       RABBITMQ_SERVER: rabbitmq
+
+  scraping:
+    container_name: sas-scraping
+    build: ./scraping
+    restart: always
+    environment:
+      RABBITMQ_SERVER: rabbitmq
+      CONNECTION_STRING: mongodb://root:example@mongo:27017/
