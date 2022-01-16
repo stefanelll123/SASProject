@@ -17,7 +17,7 @@
     </div>
   </div>
 
-  <div class="content flex column al-center">
+  <div class="flex column al-center">
     <div
       class="article flex"
       *ngFor="let article of profileService.articlesLiked"
@@ -32,20 +32,11 @@
         <div>
           <div class="article-header">
             <div class="article-title">{{ article.title }}</div>
-            <div
-              class="heart"
-              (click)="!article.liked ? likeArticle(article) : ''"
-            >
+            <div class="heart">
               <img
                 class="heart-image"
                 *ngIf="article.liked"
                 src="/assets/icons/heart-filled.png"
-                alt=""
-              />
-              <img
-                class="heart-image"
-                *ngIf="!article.liked"
-                src="/assets/icons/heart.png"
                 alt=""
               />
             </div>

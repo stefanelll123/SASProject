@@ -24,13 +24,13 @@ export class ProfileService {
 
 
   getArticlesLiked(): Observable<any> {
-    const url = this.usersBaseURL+'users/'+ this.currentUser.userId+ '/likes';
+    const url = this.baseURL+'users/'+ this.currentUser.userId+ '/articles';
 
     return this.http.get(url);
   }
 
   getPreferences(): Observable<any> {
-    
+
     const url = this.usersBaseURL+'users/'+ this.currentUser.userId+ '/preferences';
 
     return this.http.get(url);
