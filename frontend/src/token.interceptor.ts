@@ -27,7 +27,9 @@ export class TokenInterceptor implements HttpInterceptor {
                 .pipe(
                     catchError(error => {
                         if (error.status === 401) {
-                            this.router.navigateByUrl('login');
+                            localStorage.removeItem('access_token')
+                            localStorage.removeItem('user')
+                            this.router.navigate(['/login']);
                         }
                         return throwError(error);
                     }),

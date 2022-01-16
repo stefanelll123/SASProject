@@ -15,7 +15,6 @@ export class ToastComponent {
       this.toastService
           .get()
           .subscribe(data => {
-            console.log(this.data);
 
               if (data) {
                   clearTimeout(this.timeout);

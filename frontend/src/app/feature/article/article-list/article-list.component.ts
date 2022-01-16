@@ -24,12 +24,10 @@ export class ArticleListComponent implements OnInit {
 
     sub.pipe(
       map((response: any) => {
-        console.log(response)
         this.articleService.setArticles(response.articles);
       }),
       catchError(error => {
-        console.log(error)
-        this.toastService.show({error: true, message: error.error.error});
+        this.toastService.show({error: true, message: error.error.message});
         return of(error);
      })).subscribe();
   }
@@ -40,10 +38,9 @@ export class ArticleListComponent implements OnInit {
 
     sub.pipe(
       map((response: any) => {
-        console.log(response)
+        this.toastService.show({error: false, message: 'You have succesfully like the article!'})
       }),
       catchError(error => {
-        console.log(error)
         this.toastService.show({error: true, message: error.error.error});
         return of(error);
      })).subscribe();

@@ -50,8 +50,6 @@ export class AuthService {
 
     newUserPayloadCopy.preferences = preferencesAsString;
 
-    console.log(url, newUserPayloadCopy)
-
     return this.http.post(url, newUserPayloadCopy, this.options);
   }
 

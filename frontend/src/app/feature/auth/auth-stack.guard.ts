@@ -13,8 +13,6 @@ export class AuthStackGuard implements CanActivate {
 
       const token = localStorage.getItem('access_token');
 
-      console.log(token)
-
       if (token) {
         this.router.navigate(['articles']);
           return of(false);

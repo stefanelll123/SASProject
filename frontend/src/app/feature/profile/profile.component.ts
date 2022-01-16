@@ -24,11 +24,9 @@ export class ProfileComponent implements OnInit {
 
     sub.pipe(
       map((response: any) => {
-        console.log(response)
         this.profileService.setArticles(response.articles);
       }),
       catchError(error => {
-        console.log(error)
         this.toastService.show({error: true, message: error.error.error});
         return of(error);
      })).subscribe();
@@ -40,11 +38,9 @@ export class ProfileComponent implements OnInit {
 
     sub.pipe(
       map((response: any) => {
-        console.log(response)
         this.profileService.setPreferences(response.preferences);
       }),
       catchError(error => {
-        console.log(error)
         this.toastService.show({error: true, message: error.error.error});
         return of(error);
      })).subscribe();

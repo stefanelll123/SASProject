@@ -40,7 +40,6 @@ export class LoginComponent implements OnInit {
 
     sub.pipe(
       map((response: any) => {
-        console.log(response)
         this.toastService.show({error: false, message: 'You have successfully logged in!'});
         localStorage.setItem('access_token', response.token)
         delete response.token;
@@ -48,7 +47,6 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/articles']);
       }),
       catchError(error => {
-        console.log(error)
         this.toastService.show({error: true, message: error.error.error});
         return of(error);
      })).subscribe();

@@ -31,7 +31,6 @@ export class ArticleService {
   }
 
   likeArticle(item): Observable<any> {
-    console.log(this.profileService.currentUser)
     const indexOfArticle = this.articles.map(article=> article.id).indexOf(item.id)
     this.articles[indexOfArticle].liked = true;
 
