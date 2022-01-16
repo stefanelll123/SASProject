@@ -33,14 +33,14 @@ services:
     volumes:
         - /c/personal/facultate/sac/volumes/rabbit/data/:/var/lib/rabbitmq
         - /c/personal/facultate/sac/volumes/rabbit/log/:/var/log/rabbitmq
-        - ./rabbitmq/rabbitmq.config:/etc/rabbitmq/rabbitmq.config:ro
-        - ./rabbitmq/definitions.json:/etc/rabbitmq/definitions.json:ro
+        - ./backend/rabbitmq/rabbitmq.config:/etc/rabbitmq/rabbitmq.config:ro
+        - ./backend/rabbitmq/definitions.json:/etc/rabbitmq/definitions.json:ro
 
   proxy:
     image: nginx
     container_name: sas-proxy
     volumes:
-      - ./proxy:/etc/nginx/templates
+      - ./backend/proxy:/etc/nginx/templates
     ports:
       - "8800:80"
     environment:
@@ -50,7 +50,7 @@ services:
 
   identity:
     container_name: sas-identity
-    build: ./identity
+    build: ./backend/identity
     restart: always
     ports:
       - 8801:8801
@@ -60,7 +60,7 @@ services:
 
   recommendation:
     container_name: sas-recommendation
-    build: ./recommendation
+    build: ./backend/recommendation
     restart: always
     ports:
       - 8802:8802
@@ -72,8 +72,15 @@ services:
 
   scraping:
     container_name: sas-scraping
-    build: ./scraping
+    build: ./backend/scraping
     restart: always
     environment:
       RABBITMQ_SERVER: rabbitmq
       CONNECTION_STRING: mongodb://root:example@mongo:27017/
+
+  frontend:
+    container_name: sas-frontend
+    build: ./frontend
+    restart: always
+    ports:
+      - 4200:4200
