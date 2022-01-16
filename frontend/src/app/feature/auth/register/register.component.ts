@@ -65,7 +65,7 @@ export class RegisterComponent implements OnInit {
     sub.pipe(
       map((response: any) => {
         console.log(response)
-        this.toastService.show({error: false, message: 'You register successfully!'});
+        this.toastService.show({error: false, message: 'You have successfully registered!'});
         this.router.navigate(['login']);
       }),
       catchError(error => {

@@ -18,18 +18,29 @@ export class ArticleListComponent implements OnInit {
     this.getNewsFeed();
   }
 
-  getArticles(): void {
-
-  }
-
   getNewsFeed(): void {
 
-    const sub = this.articleService.getNewsFeed()
+    const sub = this.articleService.getNewsFeed();
 
     sub.pipe(
       map((response: any) => {
         console.log(response)
-        this.articleService.setArticles(response);
+        this.articleService.setArticles(response.articles);
+      }),
+      catchError(error => {
+        console.log(error)
+        this.toastService.show({error: true, message: error.error.error});
+        return of(error);
+     })).subscribe();
+  }
+
+  likeArticle(item) {
+
+    const sub = this.articleService.likeArticle(item);
+
+    sub.pipe(
+      map((response: any) => {
+        console.log(response)
       }),
       catchError(error => {
         console.log(error)

@@ -16,4 +16,50 @@
       {{ profileService.currentUser.email }}
     </div>
   </div>
+
+  <div class="content flex column al-center">
+    <div
+      class="article flex"
+      *ngFor="let article of profileService.articlesLiked"
+    >
+      <div class="image">
+        <img
+          [src]="article.cover ? article.cover : '/assets/icons/no-image.png'"
+          alt=""
+        />
+      </div>
+      <div class="flex column article-content spaced">
+        <div>
+          <div class="article-header">
+            <div class="article-title">{{ article.title }}</div>
+            <div
+              class="heart"
+              (click)="!article.liked ? likeArticle(article) : ''"
+            >
+              <img
+                class="heart-image"
+                *ngIf="article.liked"
+                src="/assets/icons/heart-filled.png"
+                alt=""
+              />
+              <img
+                class="heart-image"
+                *ngIf="!article.liked"
+                src="/assets/icons/heart.png"
+                alt=""
+              />
+            </div>
+          </div>
+          <div class="article-subtitle">
+            {{ article.subtitle }}
+          </div>
+        </div>
+        <div class="footer">
+          <a class="read-more" [href]="article.source" target="_blank">
+            Read more
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

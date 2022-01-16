@@ -1,24 +1,44 @@
 <app-header></app-header>
 
 <div class="content flex column al-center">
-  <div class="article" *ngFor="let article of articleService.articles">
-    <div class="article-header">
-      <div class="article-title">{{ article.title }}</div>
-      <div class="article-recommendations">
-        <div>{{ article.claps }}</div>
-        <span><img src="/assets/icons/clapping.png" alt="image" /></span>
-      </div>
+  <div class="article flex" *ngFor="let article of articleService.articles">
+    <div class="image">
+      <img
+        [src]="article.cover ? article.cover : '/assets/icons/no-image.png'"
+        alt=""
+      />
     </div>
-    <div class="article-subtitle">
-      {{ article.subtitle }}
-    </div>
-    <div class="footer">
-      <div class="tags">
-        <div class="tag" *ngFor="let tag of article.tags">
-          {{ tag }}
+    <div class="flex column article-content spaced">
+      <div>
+        <div class="article-header">
+          <div class="article-title">{{ article.title }}</div>
+          <div
+            class="heart"
+            (click)="!article.liked ? likeArticle(article) : ''"
+          >
+            <img
+              class="heart-image"
+              *ngIf="article.liked"
+              src="/assets/icons/heart-filled.png"
+              alt=""
+            />
+            <img
+              class="heart-image"
+              *ngIf="!article.liked"
+              src="/assets/icons/heart.png"
+              alt=""
+            />
+          </div>
+        </div>
+        <div class="article-subtitle">
+          {{ article.subtitle }}
         </div>
       </div>
-      <a class="read-more" [href]="article.source" target="_blank">Read more</a>
+      <div class="footer">
+        <a class="read-more" [href]="article.source" target="_blank">
+          Read more
+        </a>
+      </div>
     </div>
   </div>
 </div>

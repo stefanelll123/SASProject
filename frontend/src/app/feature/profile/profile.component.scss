@@ -27,3 +27,105 @@
   background: $color-light;
   margin-bottom: 20px;
 }
+
+.content {
+  width: 100%;
+  margin-bottom: 50px;
+
+  .article {
+    width: 90%;
+    max-width: 700px;
+    background-color: white;
+    margin-top: 30px;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+
+    &:last-of-type {
+      margin-bottom: 50px;
+    }
+
+    .heart {
+      height: 20px;
+      width: 20px;
+      cursor: pointer;
+
+      .heart-image {
+        height: 20px;
+        width: 20px;
+      }
+    }
+
+    .image {
+      height: 175px;
+      width: 175px;
+      border-top-left-radius: 5px;
+      border-bottom-left-radius: 5px;
+      img {
+        height: 100%;
+        width: 175px;
+        object-fit: cover;
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+      }
+    }
+
+    &-content {
+      width: calc(100% - 20px);
+      padding: 20px;
+    }
+
+    &-title {
+      font-weight: 500;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    &-header {
+      @include flex(flex-start, space-between);
+    }
+
+    &-recommendations {
+      @include flex(center, null);
+
+      img {
+        margin-left: 10px;
+        @include size(20px, 20px);
+      }
+    }
+
+    &-subtitle {
+      margin: 20px 0px;
+    }
+
+    .read-more {
+      color: $color-primary;
+      text-transform: uppercase;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 12px;
+    }
+
+    .footer {
+      @include flex(flex-end, space-between);
+
+      .tags {
+        @include flex(center, null);
+        flex-wrap: wrap;
+        width: 80%;
+        max-width: 500px;
+
+        .tag {
+          font-size: 10px;
+          text-transform: uppercase;
+          font-weight: 600;
+          background: $color-primary;
+          border-radius: 999px;
+          color: white;
+          padding: 5px 10px;
+          margin-right: 10px;
+          margin-top: 5px;
+        }
+      }
+    }
+  }
+}

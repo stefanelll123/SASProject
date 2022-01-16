@@ -69,7 +69,7 @@ def createToken(userId, email):
 
 @app.before_request
 def checkIfAuthentificated():
-    if 'login' not in request.endpoint and 'register' not in request.endpoint:
+    if 'login' not in request.endpoint and 'register' not in request.endpoint and request.method != 'OPTIONS':
         response = Response('{"error": "Please login before"}', status=401)
         if request.headers.get('Authentication') == None:
             return response

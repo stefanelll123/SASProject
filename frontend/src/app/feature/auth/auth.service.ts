@@ -52,7 +52,7 @@ export class AuthService {
 
     console.log(url, newUserPayloadCopy)
 
-    return this.http.post(url, newUserPayload, this.options);
+    return this.http.post(url, newUserPayloadCopy, this.options);
   }
 
   login(form): Observable<any> {

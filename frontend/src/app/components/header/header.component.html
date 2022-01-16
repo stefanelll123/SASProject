@@ -6,10 +6,15 @@
     </div>
 
     <div class="header-section-search" *ngIf="isSearchVisible">
-      <button style="font-size: 15px">
+      <button style="font-size: 15px" (click)="searchArticle()">
         <i class="fa fa-search fa-xs"></i>
       </button>
-      <input type="text" placeholder="Type to Search..." />
+      <input
+        type="text"
+        placeholder="Type to Search..."
+        [(ngModel)]="searchTerm"
+        (keyup.enter)="searchArticle()"
+      />
     </div>
   </div>
   <div class="header-second" *ngIf="isProfileIconVisible && profileService">
